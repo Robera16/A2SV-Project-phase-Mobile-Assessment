@@ -13,17 +13,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final remoteDataSource = RemoteDataSource(
-        "https://api.worldweatheronline.com/premium/v1/weather.ashx?key={Use one of the api keys}&q={Insert City Name here}&num_of_days=7&tp=3&format=json",
+        "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=68da0c21ae6d455e91771733231110&q=Addis%20Ababa&num_of_days=7&tp=3&format=json",
         "42fae4b4a2b54ab09a672402231110");
+
     final weatherRepository = WeatherRepository(remoteDataSource);
+
+    final weatherBloc = WeatherBloc(weatherRepository);
+
+    // Add the initial event to retrieve weather data
+    weatherBloc
+        .add(GetWeather('Addis Ababa')); // Replace with your desired city
 
     return MaterialApp(
       title: 'Weather App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
-        create: (context) => WeatherBloc(weatherRepository),
+      home: BlocProvider.value(
+        value: weatherBloc,
         child: HomePage(),
       ),
     );
